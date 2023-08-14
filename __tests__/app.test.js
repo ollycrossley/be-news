@@ -16,7 +16,6 @@ describe('Model: Topics', () => {
         test('GET 200   | Returns an object with endpoints within', () => {
             return request(app).get('/api').expect(200).then(({body}) => {
                 expect(Object.keys(body).length > 0).toBe(true)
-                console.log(body)
                 for (const key in body) {
                     expect(body[key]).toHaveProperty("description")
                     expect(body[key]).toHaveProperty("queries")
