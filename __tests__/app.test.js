@@ -10,10 +10,7 @@ afterAll(() => db.end())
 
 describe('Model: Topics', () => {
     describe('/api', () => {
-        test('GET 200   | Returns 200 status when passed', () => {
-            return request(app).get('/api').expect(200)
-        });
-        test('GET 200   | Returns an object with endpoints within', () => {
+        test('GET 200   | Returns 200 and an object with endpoints within', () => {
             return request(app).get('/api').expect(200).then(({body}) => {
                 expect(Object.keys(body).length > 0).toBe(true)
                 for (const key in body) {
@@ -27,17 +24,11 @@ describe('Model: Topics', () => {
         test('GET 200   | Returns instructions for all available endpoints', () => {
             return request(app).get('/api').expect(200).then(({body}) => {
                 const endpointsInRes = []
-                const endpoints = app._router.stack.filter(layer => layer.route).map(r => r = r.route.path)
-                /*
-                ^ For the code above ^
-                -----------------------
-                 grab the app router stack which has all available routes for the api and filter for available paths
-                 then, grab all those routes and map them for only the string value of paths available
-                */
+                const endpointsInApp = app._router.stack.filter(layer => layer.route).map(r => r = r.route.path)
                 for (const key in body) {
                     endpointsInRes.push(key.substring(key.indexOf("/")))
                 }
-                expect(endpointsInRes).toEqual(endpoints)
+                expect(endpointsInRes).toEqual(endpointsInApp)
             })
         });
     });
