@@ -10,7 +10,7 @@ afterAll(() => db.end())
 
 describe('Model: Topics', () => {
     describe('/api', () => {
-        test('GET 200   | Returns 200 and an object with endpoints within', () => {
+        test('GET 200   | Returns 200 and an object with correct endpoint values within', () => {
             return request(app).get('/api').expect(200).then(({body}) => {
                 expect(Object.keys(body).length > 0).toBe(true)
                 for (const key in body) {
