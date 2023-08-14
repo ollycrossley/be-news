@@ -1,3 +1,12 @@
-# Northcoders News API
+# Back End: News
+## Setup 
+In order to access the database, create two files with the relevant `PGDATABASE`:
 
-For instructions, please head over to [L2C NC News](https://l2c.northcoders.com/courses/be/nc-news).
+`.env.development`
+```dotenv
+PGDATABASE=nc_news
+```
+`.env.test`
+```dotenv
+PGDATABASE=nc_news_test
+```
