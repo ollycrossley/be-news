@@ -15,10 +15,13 @@ describe('Model: Topics', () => {
         });
         test('GET 200   | Returns an array of objects with description and slug keys', () => {
             return request(app).get('/api/topics').expect(200).then(({body}) => {
-                body.topics.forEach(topic => {
-                    expect(topic).toHaveProperty("slug")
-                    expect(topic).toHaveProperty("description")
-                })
+                expect(body.topics.length > 0).toBe(true)
+                if (body.topics.length > 0) {
+                    body.topics.forEach(topic => {
+                        expect(topic).toHaveProperty("slug")
+                        expect(topic).toHaveProperty("description")
+                    })
+                }
             })
         });
     });
