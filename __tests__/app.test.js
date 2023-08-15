@@ -124,6 +124,11 @@ describe('Endpoint Tests', () => {
                     expect(body).toBeSortedBy("created_at", {descending: true})
                 })
             });
+            test('GET 200   | Return empty array when given article_id with no comments', () => {
+                return request(app).get('/api/articles/2/comments').expect(200).then(({body}) => {
+                    expect(body.length).toBe(0)
+                })
+            });
             test("GET 404   | Return 404 and sends an appropriate error message when given a valid but non-existent id", () => {
                 return request(app).get('/api/articles/10000/comments').expect(404).then(({body}) => {
                     expect(body.msg).toBe('article does not exist')
