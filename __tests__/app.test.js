@@ -53,6 +53,24 @@ describe('Endpoint Tests', () => {
             })
         });
     });
+    describe('/api/articles', () => {
+        test('GET 200   | Returns 200 and an object of all articles with comment_count', () => {
+            return request(app).get('/api/articles').expect(200).then(({body}) => {
+                expect(body.articles.length).not.toBe(0)
+                body.articles.forEach(article => {
+                    expect(article).toHaveProperty("author")
+                    expect(article).toHaveProperty("title")
+                    expect(article).toHaveProperty("body")
+                    expect(article).toHaveProperty("topic")
+                    expect(article).toHaveProperty("created_at")
+                    expect(article).toHaveProperty("votes")
+                    expect(article).toHaveProperty("article_img_url")
+                    expect(article).toHaveProperty("comment_count")
+                })
+            })
+        });
+
+    });
     describe('/api/articles/:article_id', () => {
         test('GET 200   | Return 200 and correct object when passed id', () => {
             return request(app).get('/api/articles/3').expect(200).then(({body}) => {
