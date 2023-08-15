@@ -48,4 +48,21 @@ describe('Model: Topics', () => {
             })
         });
     });
+    describe('/api/articles/:article_id', () => {
+        test('GET 200   | Return 200 and correct object when passed id', () => {
+            return request(app).get('/api/articles/3').expect(200).then(({body}) => {
+                expect(body.article.article_id).toBe(3)
+            })
+        });
+        test("GET 400   | Return 400 and sends an appropriate error message when given a valid but non-existent id", () => {
+            return request(app).get('/api/articles/10000').expect(404).then(({body}) => {
+                expect(body.msg).toBe('article does not exist')
+            })
+        });
+        test('GET 400   | Return 400 and sends an appropriate error message when given an invalid id', () => {
+            return request(app).get('/api/articles/three').expect(400).then(({body}) => {
+                expect(body.msg).toBe('invalid id')
+            })
+        });
+    });
 });
