@@ -8,7 +8,7 @@ beforeEach(() => seed({topicData, userData, articleData, commentData}))
 afterAll(() => db.end())
 //#endregion
 
-describe('Model: Topics', () => {
+describe('Endpoint Tests', () => {
     describe('/api', () => {
         test('GET 200   | Returns 200 and an object with correct endpoint values within', () => {
             return request(app).get('/api').expect(200).then(({body}) => {
@@ -31,6 +31,11 @@ describe('Model: Topics', () => {
                 expect(endpointsInRes).toEqual(endpointsInApp)
             })
         });
+        test('GET 404   | Returns an appropriate message when passed an invalid endpoint url', () => {
+            return request(app).get('/api/cute_cats').expect(404).then(({body}) => {
+                expect(body.msg).toBe("url not found")
+            })
+        })
     });
     describe('/api/topics', () => {
         test('GET 200   | Returns 200 status when passed', () => {
@@ -54,7 +59,7 @@ describe('Model: Topics', () => {
                 expect(body.article.article_id).toBe(3)
             })
         });
-        test("GET 400   | Return 400 and sends an appropriate error message when given a valid but non-existent id", () => {
+        test("GET 404   | Return 400 and sends an appropriate error message when given a valid but non-existent id", () => {
             return request(app).get('/api/articles/10000').expect(404).then(({body}) => {
                 expect(body.msg).toBe('article does not exist')
             })
