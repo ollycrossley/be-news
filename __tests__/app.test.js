@@ -94,7 +94,7 @@ describe('Endpoint Tests', () => {
                     expect(body.article).toHaveProperty("article_img_url")
                 })
             });
-            test("GET 404   | Return 400 and sends an appropriate error message when given a valid but non-existent id", () => {
+            test("GET 404   | Return 404 and sends an appropriate error message when given a valid but non-existent id", () => {
                 return request(app).get('/api/articles/10000').expect(404).then(({body}) => {
                     expect(body.msg).toBe('article does not exist')
                 })
@@ -124,7 +124,7 @@ describe('Endpoint Tests', () => {
                     expect(body).toBeSortedBy("created_at", {descending: true})
                 })
             });
-            test("GET 404   | Return 400 and sends an appropriate error message when given a valid but non-existent id", () => {
+            test("GET 404   | Return 404 and sends an appropriate error message when given a valid but non-existent id", () => {
                 return request(app).get('/api/articles/10000/comments').expect(404).then(({body}) => {
                     expect(body.msg).toBe('article does not exist')
                 })
