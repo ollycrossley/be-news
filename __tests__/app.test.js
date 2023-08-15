@@ -57,6 +57,13 @@ describe('Endpoint Tests', () => {
         test('GET 200   | Return 200 and correct object when passed id', () => {
             return request(app).get('/api/articles/3').expect(200).then(({body}) => {
                 expect(body.article.article_id).toBe(3)
+                expect(body.article).toHaveProperty("author")
+                expect(body.article).toHaveProperty("title")
+                expect(body.article).toHaveProperty("body")
+                expect(body.article).toHaveProperty("topic")
+                expect(body.article).toHaveProperty("created_at")
+                expect(body.article).toHaveProperty("votes")
+                expect(body.article).toHaveProperty("article_img_url")
             })
         });
         test("GET 404   | Return 400 and sends an appropriate error message when given a valid but non-existent id", () => {
