@@ -184,8 +184,16 @@ describe('Endpoint Tests', () => {
                         expect(body.details).toBe('Key (author)=(big_steve) is not present in table "users".')
                     })
             });
+            test('POST 400   | Return 400 and sends an appropriate error message when given an invalid id', () => {
+                return request(app).post('/api/articles/three/comments').send({
+                    username: "bob",
+                    body: "i am bob"
+                }).expect(400).then(({body}) => {
+                    expect(body.msg).toBe('invalid id')
+                })
+            });
         });
 
     })
-    
+
 });
