@@ -43,7 +43,6 @@ exports.selectArticleComments = (param_id) => {
 }
 
 exports.insertArticleComment = (articleId, {username, body}) => {
-    if (!username || !body) return Promise.reject({status: 400, msg: "bad request"})
     return db.query(`
     SELECT article_id FROM articles
     WHERE article_id = $1

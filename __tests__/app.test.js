@@ -147,6 +147,7 @@ describe('Endpoint Tests', () => {
                     .then(({body}) => {
                         expect(body.author).toBe("butter_bridge")
                         expect(body.body).toBe("My awesome comment")
+                        expect(body.article_id).toBe(3)
                         expect(body).toHaveProperty("comment_id")
                         expect(body).toHaveProperty("body")
                         expect(body).toHaveProperty("article_id")
@@ -161,7 +162,7 @@ describe('Endpoint Tests', () => {
                     .send({username: "butter_bridge", content: "My awesome comment"})
                     .expect(400)
                     .then(({body}) => {
-                        expect(body.msg).toBe("bad request")
+                        expect(body.msg).toBe("request json missing key 'body'")
                     })
             });
             test('POST 404  | Returns 400 and a message when bad article id is passed', () => {
