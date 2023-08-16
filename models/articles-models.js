@@ -41,3 +41,22 @@ exports.selectArticleComments = (param_id) => {
         return rows
     })
 }
+
+exports.insertArticleComment = (articleId, {username, body}) => {
+    return db.query(`
+    SELECT article_id FROM articles
+    WHERE article_id = $1
+    `, [articleId])
+        .then(({rows}) => {
+        if (rows.length === 0) {
+            return Promise.reject({status: 404, msg: "article does not exist"})
+        }
+        return db.query(`
+            INSERT INTO comments (article_id, author, body) 
+            VALUES ($1, $2, $3)
+            RETURNING *;
+        `, [articleId, username, body])
+    }).then(({rows}) => {
+        return rows[0]
+    })
+}

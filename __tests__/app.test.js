@@ -139,7 +139,61 @@ describe('Endpoint Tests', () => {
                     expect(body.msg).toBe('invalid id')
                 })
             });
+            test('POST 201  | Return 201 and returns completed comment format', () => {
+                return request(app)
+                    .post('/api/articles/3/comments')
+                    .send({username: "butter_bridge", body: "My awesome comment"})
+                    .expect(201)
+                    .then(({body}) => {
+                        expect(body.author).toBe("butter_bridge")
+                        expect(body.body).toBe("My awesome comment")
+                        expect(body.article_id).toBe(3)
+                        expect(body).toHaveProperty("comment_id")
+                        expect(body).toHaveProperty("body")
+                        expect(body).toHaveProperty("article_id")
+                        expect(body).toHaveProperty("author")
+                        expect(body).toHaveProperty("votes")
+                        expect(body).toHaveProperty("created_at")
+                    })
+            });
+            test('POST 400  | Returns 400 and a message when passed a bad JSON request', () => {
+                return request(app)
+                    .post('/api/articles/3/comments')
+                    .send({username: "butter_bridge", content: "My awesome comment"})
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.msg).toBe("request json missing key 'body'")
+                    })
+            });
+            test('POST 404  | Returns 400 and a message when bad article id is passed', () => {
+                return request(app)
+                    .post('/api/articles/31000/comments')
+                    .send({username: "butter_bridge", body: "My awesome comment"})
+                    .expect(404)
+                    .then(({body}) => {
+                        expect(body.msg).toBe("article does not exist")
+                    })
+            });
+            test('POST 400  | Returns 400 with a message and details when username is not in table', () => {
+                return request(app)
+                    .post('/api/articles/1/comments')
+                    .send({username: "big_steve", body: "I am big steve."})
+                    .expect(400)
+                    .then(({body}) => {
+                        expect(body.msg).toBe("bad request")
+                        expect(body.details).toBe('Key (author)=(big_steve) is not present in table "users".')
+                    })
+            });
+            test('POST 400   | Return 400 and sends an appropriate error message when given an invalid id', () => {
+                return request(app).post('/api/articles/three/comments').send({
+                    username: "bob",
+                    body: "i am bob"
+                }).expect(400).then(({body}) => {
+                    expect(body.msg).toBe('invalid id')
+                })
+            });
         });
+
     })
-    
+
 });
