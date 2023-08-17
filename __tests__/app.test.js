@@ -236,4 +236,24 @@ describe('Endpoint Tests', () => {
 
     })
 
+    describe('Model: Comments', () => {
+        describe('api/comments/:comment_id', () => {
+            test('DELETE 204 | Returns 204 and deletes the correct comment', () => {
+                return request(app).delete('/api/comments/1').expect(204)
+            });
+            test('DELETE 404 | Returns 404 when trying to delete a non-existent/previously deleted comment', () => {
+                return request(app).delete('/api/comments/2').expect(204).then(()=> {
+                    return request(app).delete('/api/comments/2').expect(404).then(({body}) => {
+                        expect(body.msg).toBe("comment does not exist")
+                    })
+                })
+            });
+            test('DELETE 400 | Returns 400 when passed an invalid/unexpected id type', () => {
+                return request(app).delete('/api/comments/three').expect(400).then(({body}) => {
+                    expect(body.msg).toBe("invalid id")
+                })
+            });
+        });
+    });
+
 });

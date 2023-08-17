@@ -21,6 +21,7 @@ app.post('/api/articles/:article_id/comments', postArticleComment)
 // PATCH Requests
 app.patch('/api/articles/:article_id', patchArticleById)
 
+// DELETE Requests
 app.delete('/api/comments/:comment_id', deleteCommentById)
 
 app.use((req, res) => {
