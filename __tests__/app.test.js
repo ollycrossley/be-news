@@ -28,7 +28,7 @@ describe('Endpoint Tests', () => {
                 for (const key in body) {
                     endpointsInRes.push(key.substring(key.indexOf("/")))
                 }
-                expect(endpointsInRes).toEqual(endpointsInApp)
+                expect(endpointsInRes).toIncludeSameMembers(endpointsInApp)
             })
         });
         test('GET 404   | Returns an appropriate message when passed an invalid endpoint url', () => {
@@ -61,6 +61,7 @@ describe('Endpoint Tests', () => {
         describe('/api/articles', () => {
             test('GET 200   | Returns 200 and an object of all articles with comment_count', () => {
                 return request(app).get('/api/articles').expect(200).then(({body}) => {
+                    body = body.articles
                     expect(body.length).not.toBe(0)
                     body.forEach(article => {
                         expect(article).toHaveProperty("author")
@@ -76,6 +77,7 @@ describe('Endpoint Tests', () => {
             });
             test('GET 200   | Returns object ordered by date descending', () => {
                 return request(app).get('/api/articles').expect(200).then(({body}) => {
+                    body = body.articles
                     expect(body).toBeSorted({key: "created_at", descending: true})
                 })
             });
@@ -84,6 +86,7 @@ describe('Endpoint Tests', () => {
         describe('/api/articles/:article_id', () => {
             test('GET 200   | Return 200 and correct object when passed id', () => {
                 return request(app).get('/api/articles/3').expect(200).then(({body}) => {
+                    body = body.article
                     expect(body.article_id).toBe(3)
                     expect(body).toHaveProperty("author")
                     expect(body).toHaveProperty("title")
@@ -148,6 +151,7 @@ describe('Endpoint Tests', () => {
         describe('/api/articles/:article_id/comments', () => {
             test('GET 200   | Return 200 and array with correct comment objects', () => {
                 return request(app).get('/api/articles/3/comments').expect(200).then(({body}) => {
+                    body = body.comments
                     expect(body.length).not.toBe(0)
                     body.forEach(comment => {
                         expect(comment).toHaveProperty("comment_id")
@@ -161,11 +165,13 @@ describe('Endpoint Tests', () => {
             });
             test('GET 200   | Return the array ordered by most recent comments first', () => {
                 return request(app).get('/api/articles/3/comments').expect(200).then(({body}) => {
+                    body = body.comments
                     expect(body).toBeSortedBy("created_at", {descending: true})
                 })
             });
             test('GET 200   | Return empty array when given article_id with no comments', () => {
                 return request(app).get('/api/articles/2/comments').expect(200).then(({body}) => {
+                    body = body.comments
                     expect(body.length).toBe(0)
                 })
             });
@@ -185,6 +191,7 @@ describe('Endpoint Tests', () => {
                     .send({username: "butter_bridge", body: "My awesome comment"})
                     .expect(201)
                     .then(({body}) => {
+                        body = body.comment
                         expect(body.author).toBe("butter_bridge")
                         expect(body.body).toBe("My awesome comment")
                         expect(body.article_id).toBe(3)
@@ -251,6 +258,22 @@ describe('Endpoint Tests', () => {
             test('DELETE 400 | Returns 400 when passed an invalid/unexpected id type', () => {
                 return request(app).delete('/api/comments/three').expect(400).then(({body}) => {
                     expect(body.msg).toBe("invalid id")
+                })
+            });
+        });
+    });
+
+    describe('Model: Users', () => {
+        describe('/api/users', () => {
+            test('GET 200   | Returns 200 and all the requested users', () => {
+                return request(app).get('/api/users').expect(200).then(({body}) => {
+                    body = body.users
+                    expect(body.length).not.toBe(0)
+                    body.forEach(user => {
+                        expect(user).toHaveProperty("username")
+                        expect(user).toHaveProperty("name")
+                        expect(user).toHaveProperty("avatar_url")
+                    })
                 })
             });
         });
