@@ -81,7 +81,54 @@ describe('Endpoint Tests', () => {
                     expect(body).toBeSorted({key: "created_at", descending: true})
                 })
             });
-
+            test('GET 200   | Returns an object ordered ascending if queried', () => {
+                return request(app).get('/api/articles?order_by=asc').expect(200).then(({body}) => {
+                    body = body.articles
+                    expect(body).toBeSorted({descending: false})
+                })
+            });
+            test('GET 200   | Returns an object ordered by authors & descending when only passed authors', () => {
+                return request(app).get('/api/articles?sort_by=author').expect(200).then(({body}) => {
+                    body = body.articles
+                    expect(body).toBeSortedBy("author", {descending: true})
+                })
+            });
+            test('GET 200   | Returns objects with only coding topics when passed the query', () => {
+                return request(app).get('/api/articles?topic=mitch').expect(200).then(({body}) => {
+                    body = body.articles
+                    expect(body).toBeSortedBy("created_at", {descending: true})
+                    body.forEach(article => {
+                        expect(article.topic).toBe("mitch")
+                    })
+                })
+            });
+            test('GET 200   | Returns empty array when valid topic is passed but no results are available', () => {
+                return request(app).get('/api/articles?topic=paper').expect(200).then(({body}) => {
+                    body = body.articles
+                    expect(body.length).toBe(0)
+                })
+            });
+            test('GET 200   | Returns article and ignores invalid queries', () => {
+                return request(app).get('/api/articles?order_by=author').expect(200).then(({body}) => {
+                    body = body.articles
+                    expect(body).toBeSortedBy("created_at", {descending: true})
+                })
+            });
+            test('GET 404   | Returns empty array when invalid topic is passed', () => {
+                return request(app).get('/api/articles?topic=swimming').expect(404).then(({body}) => {
+                    expect(body.msg).toBe("topic does not exist")
+                })
+            });
+            test('GET 400   | Returns appropriate message when invalid sort is passed', () => {
+                return request(app).get('/api/articles?sort_by=sausage').expect(400).then(({body}) => {
+                    expect(body.msg).toBe("bad request")
+                })
+            });
+            test('GET 400   | Returns appropriate message when invalid order is passed', () => {
+                return request(app).get('/api/articles?order=inorderplease').expect(400).then(({body}) => {
+                    expect(body.msg).toBe("bad request")
+                })
+            });
         });
         describe('/api/articles/:article_id', () => {
             test('GET 200   | Return 200 and correct object when passed id', () => {
