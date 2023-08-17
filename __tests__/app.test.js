@@ -107,6 +107,8 @@ describe('Endpoint Tests', () => {
             test('PATCH 200 | Return 200 and edited article with correct added/subtracted vote amount', () => {
                 return request(app).patch('/api/articles/1').send({inc_votes: 3}).expect(200)
                     .then(({body}) => {
+
+                    body = body.article
                     expect(body.article_id).toBe(1)
                     expect(body.votes).toBe(103)
                     expect(body).toHaveProperty("author")
@@ -117,6 +119,7 @@ describe('Endpoint Tests', () => {
                     expect(body).toHaveProperty("article_img_url")
                     return request(app).patch('/api/articles/1').send({inc_votes: -3}).expect(200)
                 }).then(({body}) => {
+                        body = body.article
                         expect(body.article_id).toBe(1)
                         expect(body.votes).toBe(100)
                     })

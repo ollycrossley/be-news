@@ -29,7 +29,7 @@ exports.postArticleComment = (req, res, next) => {
 exports.patchArticleById = (req, res, next)  => {
     const {article_id} = req.params
     const article = req.body
-    updateArticleById(article_id, article).then(result => {
-        res.status(200).send(result)
+    updateArticleById(article_id, article).then(article => {
+        res.status(200).send({article})
     }).catch(err => next(err))
 }
