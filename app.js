@@ -3,7 +3,7 @@ const {errorHandler} = require('./db/error-handler')
 const app = express();
 const {getTopics} = require('./controllers/topics-controllers')
 const {getEndpoints} = require("./controllers/api-controllers");
-const {getArticleById, getArticles, getArticleComments, postArticleComment} = require("./controllers/articles-controllers");
+const {getArticleById, getArticles, getArticleComments, postArticleComment, patchArticleById} = require("./controllers/articles-controllers");
 const {deleteCommentById} = require("./controllers/comments-controller");
 
 app.use(express.json())
@@ -18,9 +18,11 @@ app.get('/api/articles/:article_id/comments', getArticleComments)
 // POST Requests
 app.post('/api/articles/:article_id/comments', postArticleComment)
 
-
+// PATCH Requests
+app.patch('/api/articles/:article_id', patchArticleById)
 
 app.delete('/api/comments/:comment_id', deleteCommentById)
+
 app.use((req, res) => {
     res.status(404).send({msg: "url not found"})
 })
