@@ -95,6 +95,7 @@ describe('Endpoint Tests', () => {
                     expect(body).toHaveProperty("created_at")
                     expect(body).toHaveProperty("votes")
                     expect(body).toHaveProperty("article_img_url")
+                    expect(body).toHaveProperty("comment_count")
                 })
             });
             test("GET 404   | Return 404 and sends an appropriate error message when given a valid but non-existent id", () => {
