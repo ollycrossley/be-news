@@ -116,5 +116,19 @@
         "article_img_url": "https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?w=700&h=700"
       }
     }
+  },
+  "GET /api/users": {
+    "description": "serves up all users in the table",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "users": [
+        {
+          "username": "myUser123",
+          "name": "Big Fred",
+          "avatar_url": "https://photos.google.com/link/photo1"
+        }
+      ]
+    }
   }
 }
