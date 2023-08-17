@@ -28,7 +28,7 @@ describe('Endpoint Tests', () => {
                 for (const key in body) {
                     endpointsInRes.push(key.substring(key.indexOf("/")))
                 }
-                expect(endpointsInRes).toContain(...endpointsInApp)
+                expect(endpointsInRes).toIncludeSameMembers(endpointsInApp)
             })
         });
         test('GET 404   | Returns an appropriate message when passed an invalid endpoint url', () => {
