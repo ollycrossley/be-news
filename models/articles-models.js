@@ -55,16 +55,21 @@ exports.selectArticles = (topic = null, sort_by = "created_at", order = "desc") 
 
 exports.selectArticleById = (param_id) => {
     return db.query(`
-        SELECT author,
+        SELECT articles.author,
                title,
-               article_id,
-               body,
+               articles.article_id,
+               articles.body,
                topic,
-               created_at,
-               votes,
-               article_img_url
+               articles.created_at,
+               articles.votes,
+               article_img_url,
+               COUNT(comments.article_id)::INT AS comment_count
         FROM articles
-        WHERE article_id = $1
+                 LEFT JOIN comments ON articles.article_id = comments.article_id
+        WHERE articles.article_id = $1
+        GROUP BY articles.author, title, articles.article_id, articles.body, topic, articles.created_at, articles.votes,
+                 article_img_url
+        
     `, [param_id]).then(({rows}) => {
         if (rows.length === 0) return Promise.reject({status: 404, msg: "article does not exist"})
         return rows[0];

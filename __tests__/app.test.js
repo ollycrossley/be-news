@@ -144,6 +144,14 @@ describe('Endpoint Tests', () => {
                     expect(body).toHaveProperty("article_img_url")
                 })
             });
+            test('GET 200   | Return 200 and ensure article has comment_count key', () => {
+                return request(app).get('/api/articles/1').expect(200).then(({body}) => {
+                    body = body.article
+                    expect(body).toHaveProperty("comment_count")
+                })
+
+
+            });
             test("GET 404   | Return 404 and sends an appropriate error message when given a valid but non-existent id", () => {
                 return request(app).get('/api/articles/10000').expect(404).then(({body}) => {
                     expect(body.msg).toBe('article does not exist')
