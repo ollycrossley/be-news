@@ -6,17 +6,17 @@ exports.selectArticles = (topic = null, sort_by = "created_at", order = "desc") 
     const acceptedSorts = ["asc", "desc"];
 
     if (!acceptedOrders.includes(sort_by)) {
-        return Promise.reject({ status: 400, msg: "bad request" });
+        return Promise.reject({status: 400, msg: "bad request"});
     }
 
     if (!acceptedSorts.includes(order)) {
-        return Promise.reject({ status: 400, msg: "bad request" });
+        return Promise.reject({status: 400, msg: "bad request"});
     }
 
     let queryList = [topic]
 
     let baseQuery = `
-    SELECT articles.author,
+        SELECT articles.author,
                title,
                articles.article_id,
                articles.body,
@@ -27,15 +27,30 @@ exports.selectArticles = (topic = null, sort_by = "created_at", order = "desc") 
                COUNT(comments.article_id)::INT AS comment_count
         FROM articles
                  LEFT JOIN comments ON articles.article_id = comments.article_id
-        WHERE $1::VARCHAR IS NULL OR topic = $1::VARCHAR
+        WHERE $1::VARCHAR IS NULL
+           OR topic = $1::VARCHAR
         GROUP BY articles.author, title, articles.article_id, articles.body, topic, articles.created_at, articles.votes,
                  article_img_url
+        ORDER BY ${sort_by} ${order};
     `
-    baseQuery += ` ORDER BY ${sort_by} ${order};`
+    if (!topic) {
+        return db.query(baseQuery, queryList).then(({rows}) => {
+            return rows
+        })
+    } else if (topic){
+        return db.query(`
+            SELECT slug
+            FROM topics 
+            WHERE slug = $1`, [topic]).then(({rows}) => {
+            if (rows.length === 0) {
+                return Promise.reject({status: 404, msg: "topic does not exist"})
+            }
+            return db.query(baseQuery, queryList).then(({rows}) => {
+                return rows
+            })
+        })
+    }
 
-    return db.query(baseQuery, queryList).then(({rows}) => {
-        return rows
-    })
 }
 
 exports.selectArticleById = (param_id) => {
@@ -104,7 +119,10 @@ exports.updateArticleById = (article_id, {inc_votes}) => {
     `, [article_id])
         .then(({rows}) => {
             if (rows.length === 0) return Promise.reject({status: 404, msg: "article does not exist"})
-            if (inc_votes && typeof inc_votes !== "number") return Promise.reject({status: 400, msg: "invalid inc_votes type"})
+            if (inc_votes && typeof inc_votes !== "number") return Promise.reject({
+                status: 400,
+                msg: "invalid inc_votes type"
+            })
             return db.query(`
                 UPDATE articles
                 SET votes = votes + $1

@@ -94,16 +94,16 @@ describe('Endpoint Tests', () => {
                 })
             });
             test('GET 200   | Returns objects with only coding topics when passed the query', () => {
-                return request(app).get('/api/articles?topic=coding').expect(200).then(({body}) => {
+                return request(app).get('/api/articles?topic=mitch').expect(200).then(({body}) => {
                     body = body.articles
                     expect(body).toBeSortedBy("created_at", {descending: true})
                     body.forEach(article => {
-                        expect(article.topic).toBe("coding")
+                        expect(article.topic).toBe("mitch")
                     })
                 })
             });
             test('GET 200   | Returns empty array when valid topic is passed but no results are available', () => {
-                return request(app).get('/api/articles?topic=swimming').expect(200).then(({body}) => {
+                return request(app).get('/api/articles?topic=paper').expect(200).then(({body}) => {
                     body = body.articles
                     expect(body.length).toBe(0)
                 })
@@ -112,6 +112,11 @@ describe('Endpoint Tests', () => {
                 return request(app).get('/api/articles?order_by=author').expect(200).then(({body}) => {
                     body = body.articles
                     expect(body).toBeSortedBy("created_at", {descending: true})
+                })
+            });
+            test('GET 404   | Returns empty array when invalid topic is passed', () => {
+                return request(app).get('/api/articles?topic=swimming').expect(404).then(({body}) => {
+                    expect(body.msg).toBe("topic does not exist")
                 })
             });
             test('GET 400   | Returns appropriate message when invalid sort is passed', () => {
