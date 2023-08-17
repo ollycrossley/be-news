@@ -61,8 +61,8 @@ describe('Endpoint Tests', () => {
         describe('/api/articles', () => {
             test('GET 200   | Returns 200 and an object of all articles with comment_count', () => {
                 return request(app).get('/api/articles').expect(200).then(({body}) => {
-                    expect(body.articles.length).not.toBe(0)
-                    body.articles.forEach(article => {
+                    expect(body.length).not.toBe(0)
+                    body.forEach(article => {
                         expect(article).toHaveProperty("author")
                         expect(article).toHaveProperty("title")
                         expect(article).toHaveProperty("body")
@@ -76,7 +76,7 @@ describe('Endpoint Tests', () => {
             });
             test('GET 200   | Returns object ordered by date descending', () => {
                 return request(app).get('/api/articles').expect(200).then(({body}) => {
-                    expect(body.articles).toBeSorted({key: "created_at", descending: true})
+                    expect(body).toBeSorted({key: "created_at", descending: true})
                 })
             });
 
@@ -84,14 +84,14 @@ describe('Endpoint Tests', () => {
         describe('/api/articles/:article_id', () => {
             test('GET 200   | Return 200 and correct object when passed id', () => {
                 return request(app).get('/api/articles/3').expect(200).then(({body}) => {
-                    expect(body.article.article_id).toBe(3)
-                    expect(body.article).toHaveProperty("author")
-                    expect(body.article).toHaveProperty("title")
-                    expect(body.article).toHaveProperty("body")
-                    expect(body.article).toHaveProperty("topic")
-                    expect(body.article).toHaveProperty("created_at")
-                    expect(body.article).toHaveProperty("votes")
-                    expect(body.article).toHaveProperty("article_img_url")
+                    expect(body.article_id).toBe(3)
+                    expect(body).toHaveProperty("author")
+                    expect(body).toHaveProperty("title")
+                    expect(body).toHaveProperty("body")
+                    expect(body).toHaveProperty("topic")
+                    expect(body).toHaveProperty("created_at")
+                    expect(body).toHaveProperty("votes")
+                    expect(body).toHaveProperty("article_img_url")
                 })
             });
             test("GET 404   | Return 404 and sends an appropriate error message when given a valid but non-existent id", () => {
@@ -102,6 +102,46 @@ describe('Endpoint Tests', () => {
             test('GET 400   | Return 400 and sends an appropriate error message when given an invalid id', () => {
                 return request(app).get('/api/articles/three').expect(400).then(({body}) => {
                     expect(body.msg).toBe('invalid id')
+                })
+            });
+            test('PATCH 200 | Return 200 and edited article with correct added/subtracted vote amount', () => {
+                return request(app).patch('/api/articles/1').send({inc_votes: 3}).expect(200)
+                    .then(({body}) => {
+
+                    body = body.article
+                    expect(body.article_id).toBe(1)
+                    expect(body.votes).toBe(103)
+                    expect(body).toHaveProperty("author")
+                    expect(body).toHaveProperty("title")
+                    expect(body).toHaveProperty("body")
+                    expect(body).toHaveProperty("topic")
+                    expect(body).toHaveProperty("created_at")
+                    expect(body).toHaveProperty("article_img_url")
+                    return request(app).patch('/api/articles/1').send({inc_votes: -3}).expect(200)
+                }).then(({body}) => {
+                        body = body.article
+                        expect(body.article_id).toBe(1)
+                        expect(body.votes).toBe(100)
+                    })
+            });
+            test('PATCH 404 | Return 404 and sends appropriate message when valid non existent id', () => {
+                return request(app).patch('/api/articles/10000').send({inc_votes: -3}).expect(404).then(({body}) => {
+                    expect(body.msg).toBe('article does not exist')
+                })
+            });
+            test('PATCH 400 | Return 400 and sends appropriate message when invalid id is passed', () => {
+                return request(app).patch('/api/articles/three').send({inc_votes: -3}).expect(400).then(({body}) => {
+                    expect(body.msg).toBe('invalid id')
+                })
+            });
+            test('PATCH 400 | Return 400 and appropriate message when passed invalid/missing inc_votes key', () => {
+                return request(app).patch('/api/articles/3').send({inc_voters: 3}).expect(400).then(({body}) => {
+                    expect(body.msg).toBe("request json missing reference to key 'votes'")
+                })
+            });
+            test('PATCH 400 | Return 400 and appropriate message when passed invalid/missing inc_votes value', () => {
+                return request(app).patch('/api/articles/3').send({inc_votes: "three"}).expect(400).then(({body}) => {
+                    expect(body.msg).toBe("invalid inc_votes type")
                 })
             });
         });
@@ -162,7 +202,7 @@ describe('Endpoint Tests', () => {
                     .send({username: "butter_bridge", content: "My awesome comment"})
                     .expect(400)
                     .then(({body}) => {
-                        expect(body.msg).toBe("request json missing key 'body'")
+                        expect(body.msg).toBe("request json missing reference to key 'body'")
                     })
             });
             test('POST 404  | Returns 400 and a message when bad article id is passed', () => {
