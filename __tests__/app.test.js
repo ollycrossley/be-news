@@ -263,4 +263,20 @@ describe('Endpoint Tests', () => {
         });
     });
 
+    describe('Model: Users', () => {
+        describe('/api/users', () => {
+            test('GET 200   | Returns 200 and all the requested users', () => {
+                return request(app).get('/api/users').expect(200).then(({body}) => {
+                    body = body.users
+                    expect(body.length).not.toBe(0)
+                    body.forEach(user => {
+                        expect(user).toHaveProperty("username")
+                        expect(user).toHaveProperty("name")
+                        expect(user).toHaveProperty("avatar_url")
+                    })
+                })
+            });
+        });
+    });
+
 });
