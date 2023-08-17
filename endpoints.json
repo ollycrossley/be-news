@@ -117,6 +117,12 @@
       }
     }
   },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes a given comment by id",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {}
+  },
   "GET /api/users": {
     "description": "serves up all users in the table",
     "queries": [],

@@ -5,9 +5,9 @@ const {getTopics} = require('./controllers/topics-controllers')
 const {getEndpoints} = require("./controllers/api-controllers");
 const {getArticleById, getArticles, getArticleComments, postArticleComment, patchArticleById} = require("./controllers/articles-controllers");
 const {getUsers} = require("./controllers/users-controllers");
+const {deleteCommentById} = require("./controllers/comments-controller");
 
 app.use(express.json())
-
 
 // GET Requests
 app.get('/api', getEndpoints)
@@ -23,6 +23,8 @@ app.post('/api/articles/:article_id/comments', postArticleComment)
 // PATCH Requests
 app.patch('/api/articles/:article_id', patchArticleById)
 
+// DELETE Requests
+app.delete('/api/comments/:comment_id', deleteCommentById)
 
 app.use((req, res) => {
     res.status(404).send({msg: "url not found"})
