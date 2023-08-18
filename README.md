@@ -30,7 +30,7 @@ cd be-news
 # If you are on VS Code you can use in the terminal
 code .
 ```
-Once cloned, open the project and install all the packages by running `npm install`.
+Once cloned and opened, install all the packages by running `npm install`.
 ### PSQL Setup (skip if you already have PSQL installed)
 This project runs on **PSQL** so make sure you have that setup.
 
@@ -47,7 +47,7 @@ brew doctor
 brew install postgresql
 ```
 #### For Ubuntu/WSL users
-Open your terminal (not in your IDE).
+Open your terminal (not in your IDE) and run `cd`.
 
 Then, run the set of commands below one by one to get started with PSQL:
 ```shell
