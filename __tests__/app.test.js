@@ -348,6 +348,22 @@ describe('Endpoint Tests', () => {
                 })
             });
         });
+        describe('/api/users/:username', () => {
+            test('GET 200   | Return the correct user object ', () => {
+                return request(app).get('/api/users/lurker').expect(200).then(({body}) => {
+                    body = body.user
+                    expect(body).toHaveProperty("username")
+                    expect(body.username).toBe("lurker")
+                    expect(body).toHaveProperty("name")
+                    expect(body).toHaveProperty("avatar_url")
+                })
+            });
+            test('GET 404   | Return 404 and an appropriate message when passed valid id that does not exist', () => {
+                return request(app).get('/api/users/olly').expect(404).then(({body}) => {
+                    expect(body.msg).toBe("user does not exist")
+                })
+            });
+        });
     });
 
 });
