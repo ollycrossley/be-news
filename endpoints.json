@@ -30,12 +30,50 @@
       ]
     }
   },
+  "GET /api/topics/:slug": {
+    "description": "serves an array of all topics",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "topics": {
+        "slug": "football",
+        "description": "Footie!"
+      }
+    }
+  },
   "GET /api/articles": {
     "description": "serves an array of all articles",
-    "queries": ["topic", "sort_by", "order_by"],
+    "queries": [
+      "topic",
+      "sort_by",
+      "order_by"
+    ],
     "bodyFormat": {},
     "exampleResponse": {
       "articles": [
+        {
+          "title": "Seafood substitutions are increasing",
+          "topic": "cooking",
+          "author": "weegembump",
+          "body": "Text from the article..",
+          "created_at": "2018-05-30T15:59:13.341Z",
+          "votes": 0,
+          "comment_count": 6
+        }
+      ]
+    }
+  },
+  "POST /api/articles": {
+    "description": "adds an article, sends back formatted article",
+    "queries": [],
+    "bodyFormat": {
+      "title": "TBC",
+      "topic": "TBC",
+      "author": "TBC",
+      "article_img_url": "TBC"
+    },
+    "exampleResponse": {
+      "article": [
         {
           "title": "Seafood substitutions are increasing",
           "topic": "cooking",
@@ -136,6 +174,18 @@
           "avatar_url": "https://photos.google.com/link/photo1"
         }
       ]
+    }
+  },
+  "GET /api/users/:username": {
+    "description": "serves up one user in the table by username",
+    "queries": [],
+    "bodyFormat": {},
+    "exampleResponse": {
+      "users": {
+        "username": "myUser123",
+        "name": "Big Fred",
+        "avatar_url": "https://photos.google.com/link/photo1"
+      }
     }
   }
 }
