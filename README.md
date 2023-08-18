@@ -2,7 +2,7 @@
 ## Summary
 This is a back end project that stores the data of elements of a news site,
 including `articles`, `topics`, `comments` and `users`, and provides this information
-on a set of endpoints hosted by using **express** and **PostgreSQL**.
+on a set of endpoints by using **express** and **PostgreSQL**.
 
 ## Live Demo
 A live demo can be found [here](https://olly-nc-news.onrender.com).
