@@ -26,6 +26,8 @@ You may clone this repo using:
 ```shell
 git clone https://github.com/ollycrossley/be-news.git
 cd be-news
+
+# If you are on VS Code you can use in the terminal
 code .
 ```
 Once cloned, open the project and install all the packages by running `npm install`.
