@@ -5,7 +5,7 @@ including `articles`, `topics`, `comments` and `users`, and provides this inform
 on a set of endpoints by using **express** and **PostgreSQL**.
 
 ## Live Demo
-A live demo can be found [here](https://olly-nc-news.onrender.com).
+A live demo can be found <a href="https://olly-nc-news.onrender.com/api" target="_blank">here</a>.
 
 A list of potential endpoints to try are:
 
