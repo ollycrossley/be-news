@@ -13,8 +13,10 @@ A list of potential endpoints to try are:
 |---------------|--------------------------------------|-------------------------------------|----------------------------------------------------------------|
 | GET           | `/api`                               | Returns all available endpoints     | None                                                           |
 | GET           | `/api/topics`                        | Returns all available topics        | None                                                           |
+| GET           | `/api/topics/:slug`                  | Returns a topic by its slug         | None                                                           |
 | GET           | `/api/users`                         | Returns all users                   | None                                                           |
-| GET           | `/api/articles`                      | Returns all articles                | `topic : string`<br/>`order : asc/desc`<br/>`sort_by : string` |
+| GET           | `/api/users/:username`               | Returns a user by their username    | None                                                           |
+| GET<br/>POST  | `/api/articles`                      | Returns all articles                | `topic : string`<br/>`order : asc/desc`<br/>`sort_by : string` |
 | GET<br/>PATCH | `/api/articles/:article_id`          | Returns a selected article by ID    | None                                                           |
 | GET<br/>POST  | `/api/articles/:article_id/comments` | Returns all comments for an article | None                                                           |
 | DELETE        | `/api/comments/:comment_id`          | Deletes a selected comment by ID    | None                                                           |
