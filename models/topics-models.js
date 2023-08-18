@@ -1,6 +1,14 @@
 const db = require('../db/connection')
 
-exports.selectTopics = (topic) => {
+exports.selectTopics = () => {
+    return db.query(`
+        SELECT *
+        FROM topics`).then(({rows}) => {
+        return rows
+    })
+}
+
+exports.selectTopicBySlug = (topic) => {
     return db.query(`
         SELECT *
         FROM topics
@@ -8,6 +16,6 @@ exports.selectTopics = (topic) => {
         if (rows.length === 0) {
             return Promise.reject({status: 404, msg: "topic does not exist"})
         }
-        return rows
+        return rows[0]
     })
 }

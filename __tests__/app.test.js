@@ -24,7 +24,7 @@ describe('Endpoint Tests', () => {
         test('GET 200   | Returns instructions for all available endpoints', () => {
             return request(app).get('/api').expect(200).then(({body}) => {
                 const endpointsInRes = []
-                const endpointsInApp = app._router.stack.filter(layer => layer.route).map(r => r = r.route.path)
+                const endpointsInApp = app._router.stack.filter(layer => layer.route).map(r => r.route.path)
                 for (const key in body) {
                     endpointsInRes.push(key.substring(key.indexOf("/")))
                 }
@@ -54,6 +54,22 @@ describe('Endpoint Tests', () => {
                     }
                 })
             });
+        });
+        describe('/api/topics/:slug', () => {
+            test('GET 200   | Returns an object with the selected slug', () => {
+                return request(app).get('/api/topics/mitch').expect(200).then(({body}) => {
+                    body = body.topic
+                    expect(body).toHaveProperty("slug")
+                    expect(body.slug).toBe("mitch")
+                    expect(body).toHaveProperty("description")
+                })
+            })
+            test('GET 404   | Returns an error with an appropriate message', () => {
+                return request(app).get('/api/topics/football').expect(404).then(({body}) => {
+                    expect(body.msg).toBe("topic does not exist")
+                })
+            });
+
         });
     });
 
