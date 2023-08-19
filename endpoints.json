@@ -31,11 +31,11 @@
     }
   },
   "GET /api/topics/:slug": {
-    "description": "serves an array of all topics",
+    "description": "serves up a chosen topic by id",
     "queries": [],
     "bodyFormat": {},
     "exampleResponse": {
-      "topics": {
+      "topic": {
         "slug": "football",
         "description": "Footie!"
       }
@@ -46,7 +46,7 @@
     "queries": [
       "topic",
       "sort_by",
-      "order_by"
+      "order"
     ],
     "bodyFormat": {},
     "exampleResponse": {
@@ -67,23 +67,22 @@
     "description": "adds an article, sends back formatted article",
     "queries": [],
     "bodyFormat": {
-      "title": "TBC",
-      "topic": "TBC",
-      "author": "TBC",
-      "article_img_url": "TBC"
+      "title": "How a cheese diet could revolutionise football",
+      "body": "Cheese is not only a delicious snack, but also a potential game-changer for football players.",
+      "topic": "football",
+      "username": "lowly_spoon"
     },
     "exampleResponse": {
-      "article": [
-        {
-          "title": "Seafood substitutions are increasing",
-          "topic": "cooking",
-          "author": "weegembump",
-          "body": "Text from the article..",
-          "created_at": "2018-05-30T15:59:13.341Z",
-          "votes": 0,
-          "comment_count": 6
-        }
-      ]
+      "article": {
+        "title": "How a cheese diet could revolutionise football",
+        "body": "Cheese is not only a delicious snack, but also a potential game-changer for football players.",
+        "topic": "football",
+        "username": "lowly_spoon",
+        "created_at": "2018-05-30T15:59:13.341Z",
+        "votes": 0,
+        "comment_count": 0,
+        "article_img_url": "www.pretend-this-is-a-link.com"
+      }
     }
   },
   "GET /api/articles/:article_id": {
