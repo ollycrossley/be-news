@@ -8,8 +8,10 @@ const {getEndpoints} = require("./controllers/api-controllers");
 const {getArticleById, getArticles, getArticleComments, postArticleComment, patchArticleById, postArticle} = require("./controllers/articles-controllers");
 const {getUsers, getUserByUsername} = require("./controllers/users-controllers");
 const {deleteCommentById} = require("./controllers/comments-controller");
+const cors = require('cors');
 
 // JSON Middleware
+app.use(cors());
 app.use(express.json())
 
 // GET Requests
