@@ -2,14 +2,14 @@ const db = require('../db/connection')
 
 exports.selectArticles = (topic = null, sort_by = "created_at", order = "desc") => {
 
-    const acceptedOrders = ["author", "title", "article_id", "topic", "created_at", "votes", "comment_count"]
-    const acceptedSorts = ["asc", "desc"];
+    const acceptedSorts = ["author", "title", "article_id", "topic", "created_at", "votes", "comment_count"]
+    const acceptedOrders = ["asc", "desc"];
 
-    if (!acceptedOrders.includes(sort_by)) {
+    if (!acceptedSorts.includes(sort_by)) {
         return Promise.reject({status: 400, msg: "bad request"});
     }
 
-    if (!acceptedSorts.includes(order)) {
+    if (!acceptedOrders.includes(order)) {
         return Promise.reject({status: 400, msg: "bad request"});
     }
 
